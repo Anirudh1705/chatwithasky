@@ -7,7 +7,7 @@ export default function RegisterPage() {
     <div className="min-h-screen bg-parchment flex flex-col">
       <nav className="border-b border-border-cream bg-ivory">
         <div className="max-w-6xl mx-auto px-6 py-5">
-          <Link href="/" className="flex items-center gap-0.5">
+          <Link href="/" className="flex items-center gap-0">
             <Image src="/logo.png" alt="Asky" width={72} height={72} />
             <span className="text-3xl font-serif font-medium text-near-black">Asky</span>
           </Link>
