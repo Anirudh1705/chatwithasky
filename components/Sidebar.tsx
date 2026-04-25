@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 
 interface ChatItem {
@@ -53,7 +54,15 @@ export default function Sidebar() {
       } bg-dark-surface text-warm-silver transition-all duration-300 flex flex-col h-screen border-r border-border-dark`}
     >
       <div className="p-6 border-b border-border-dark flex items-center justify-between gap-2">
-        {open && <h1 className="text-xl font-serif font-medium text-ivory">Asky</h1>}
+        {open && (
+          <div className="flex items-center gap-2">
+            <Image src="/logo.png" alt="Asky" width={28} height={28} className="rounded-sm" />
+            <h1 className="text-xl font-serif font-medium text-ivory">Asky</h1>
+          </div>
+        )}
+        {!open && (
+          <Image src="/logo.png" alt="Asky" width={28} height={28} className="rounded-sm" />
+        )}
         <button
           onClick={() => setOpen(!open)}
           className="p-2 hover:bg-deep-dark rounded-md transition-colors flex-shrink-0"
