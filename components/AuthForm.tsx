@@ -13,6 +13,7 @@ export default function AuthForm({ type }: AuthFormProps) {
   const [name, setName] = useState('')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
+  const [emailError, setEmailError] = useState('')
   const router = useRouter()
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -21,11 +22,9 @@ export default function AuthForm({ type }: AuthFormProps) {
     setError('')
 
     if (!email.toLowerCase().endsWith('@gmail.com')) {
-      setError('Only Gmail addresses are allowed')
       setLoading(false)
       return
     }
-
     try {
       const endpoint = type === 'login' ? '/api/auth/login' : '/api/auth/register'
       const payload = type === 'login' 
@@ -84,11 +83,21 @@ export default function AuthForm({ type }: AuthFormProps) {
         <input
           type="email"
           value={email}
-          onChange={(e) => setEmail(e.target.value)}
+          onChange={(e) => {
+            setEmail(e.target.value)
+            if (e.target.value && !e.target.value.toLowerCase().endsWith('@gmail.com')) {
+              setEmailError('Only Gmail addresses are allowed')
+            } else {
+              setEmailError('')
+            }
+          }}
           required
-          className="input-field"
+          className={`input-field ${emailError ? 'border-error-crimson' : ''}`}
           placeholder="you@gmail.com"
         />
+        {emailError && (
+          <p className="mt-1 text-sm text-error-crimson">{emailError}</p>
+        )}
       </div>
 
       <div>
