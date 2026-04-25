@@ -55,7 +55,7 @@ export default function Sidebar() {
     >
       <div className="p-6 border-b border-border-dark flex items-center justify-between gap-2">
         {open && (
-          <div className="flex items-center gap-1">
+          <div className="flex items-center gap-0.5">
             <Image src="/logo.png" alt="Asky" width={56} height={56} className="rounded-sm" />
             <h1 className="text-xl font-serif font-medium text-ivory">Asky</h1>
           </div>
