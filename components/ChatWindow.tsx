@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { TokenIcon, CarbonIcon, LightbulbIcon, CheckIcon } from './Icons'
 
@@ -25,7 +25,7 @@ interface ChatWindowProps {
 
 function parseMarkdown(text: string) {
   const lines = text.split('\n')
-  const elements: JSX.Element[] = []
+  const elements: React.ReactElement[] = []
   let i = 0
 
   while (i < lines.length) {
@@ -67,7 +67,7 @@ function parseMarkdown(text: string) {
     }
     // Code blocks
     else if (line.startsWith('```')) {
-      const codeLines = []
+      const codeLines: string[] = []
       i++
       while (i < lines.length && !lines[i].startsWith('```')) {
         codeLines.push(lines[i])
@@ -82,7 +82,7 @@ function parseMarkdown(text: string) {
     }
     // Lists
     else if (line.match(/^[\s]*[-*]\s/)) {
-      const listItems = []
+      const listItems: React.ReactElement[] = []
       while (i < lines.length && lines[i].match(/^[\s]*[-*]\s/)) {
         const content = lines[i].replace(/^[\s]*[-*]\s/, '')
         listItems.push(
@@ -117,13 +117,13 @@ function parseMarkdown(text: string) {
 }
 
 function parseInline(text: string) {
-  const parts: (string | JSX.Element)[] = []
+  const parts: (string | React.ReactElement)[] = []
   let lastIndex = 0
 
   // Bold
   const boldRegex = /\*\*(.*?)\*\*/g
-  let match
-  const boldMatches = []
+  let match: RegExpExecArray | null
+  const boldMatches: { start: number; end: number; content: string; type: string }[] = []
   while ((match = boldRegex.exec(text)) !== null) {
     boldMatches.push({ start: match.index, end: match.index + match[0].length, content: match[1], type: 'bold' })
   }
@@ -131,7 +131,7 @@ function parseInline(text: string) {
   // Italic
   const italicRegex = /\*(.*?)\*/g
   while ((match = italicRegex.exec(text)) !== null) {
-    if (!boldMatches.some(b => b.start <= match.index && match.index < b.end)) {
+    if (!boldMatches.some(b => b.start <= match!.index && match!.index < b.end)) {
       boldMatches.push({ start: match.index, end: match.index + match[0].length, content: match[1], type: 'italic' })
     }
   }
@@ -139,7 +139,7 @@ function parseInline(text: string) {
   // Code
   const codeRegex = /`(.*?)`/g
   while ((match = codeRegex.exec(text)) !== null) {
-    if (!boldMatches.some(b => b.start <= match.index && match.index < b.end)) {
+    if (!boldMatches.some(b => b.start <= match!.index && match!.index < b.end)) {
       boldMatches.push({ start: match.index, end: match.index + match[0].length, content: match[1], type: 'code' })
     }
   }
