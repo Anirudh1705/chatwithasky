@@ -6,7 +6,7 @@ export default function Home() {
     <div className="min-h-screen bg-parchment">
       <nav className="border-b border-border-cream bg-ivory sticky top-0 z-50">
         <div className="max-w-6xl mx-auto px-6 py-5 flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-2">
+          <Link href="/" className="flex items-center gap-1">
             <Image src="/logo.png" alt="Asky" width={72} height={72} />
             <h1 className="text-3xl font-serif font-medium text-near-black">Asky</h1>
           </Link>
