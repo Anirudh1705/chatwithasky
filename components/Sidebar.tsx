@@ -56,12 +56,12 @@ export default function Sidebar() {
       <div className="p-6 border-b border-border-dark flex items-center justify-between gap-2">
         {open && (
           <div className="flex items-center gap-2">
-            <Image src="/logo.png" alt="Asky" width={28} height={28} className="rounded-sm" />
+            <Image src="/logo.png" alt="Asky" width={40} height={40} className="rounded-sm" />
             <h1 className="text-xl font-serif font-medium text-ivory">Asky</h1>
           </div>
         )}
         {!open && (
-          <Image src="/logo.png" alt="Asky" width={28} height={28} className="rounded-sm" />
+          <Image src="/logo.png" alt="Asky" width={40} height={40} className="rounded-sm" />
         )}
         <button
           onClick={() => setOpen(!open)}
