@@ -10,10 +10,11 @@ export async function POST(req: NextRequest) {
     const { email, password, name } = await req.json();
 
     if (!email || !password || !name) {
-      return NextResponse.json(
-        { error: 'Missing required fields' },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
+    }
+
+    if (!email.toLowerCase().endsWith('@gmail.com')) {
+      return NextResponse.json({ error: 'Only Gmail addresses are allowed' }, { status: 400 });
     }
 
     const existingUser = await User.findOne({ email });

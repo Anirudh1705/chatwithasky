@@ -20,6 +20,12 @@ export default function AuthForm({ type }: AuthFormProps) {
     setLoading(true)
     setError('')
 
+    if (!email.toLowerCase().endsWith('@gmail.com')) {
+      setError('Only Gmail addresses are allowed')
+      setLoading(false)
+      return
+    }
+
     try {
       const endpoint = type === 'login' ? '/api/auth/login' : '/api/auth/register'
       const payload = type === 'login' 
@@ -81,7 +87,7 @@ export default function AuthForm({ type }: AuthFormProps) {
           onChange={(e) => setEmail(e.target.value)}
           required
           className="input-field"
-          placeholder="you@example.com"
+          placeholder="you@gmail.com"
         />
       </div>
 
