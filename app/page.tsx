@@ -95,7 +95,7 @@ export default function Home() {
 
       <footer className="border-t border-border-cream bg-ivory py-12">
         <div className="max-w-6xl mx-auto px-6 text-center text-stone-gray">
-          <p className="text-base">© 2024 Asky. Inspired by thoughtful design.</p>
+          <p className="text-base">© {new Date().getFullYear()} Asky. Inspired by thoughtful design.</p>
         </div>
       </footer>
     </div>
