@@ -7,7 +7,7 @@ export default function Home() {
       <nav className="border-b border-border-cream bg-ivory sticky top-0 z-50">
         <div className="max-w-6xl mx-auto px-6 py-5 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-0">
-            <Image src="/logo.png" alt="Asky" width={72} height={72} />
+            <Image src="/logo.png" alt="Asky" width={72} height={72} style={{mixBlendMode: 'multiply'}} />
             <h1 className="text-3xl font-serif font-medium text-near-black">Asky</h1>
           </Link>
           <div className="flex gap-4">
@@ -95,7 +95,17 @@ export default function Home() {
 
       <footer className="border-t border-border-cream bg-ivory py-12">
         <div className="max-w-6xl mx-auto px-6 text-center text-stone-gray">
-          <p className="text-base">© {new Date().getFullYear()} Asky. Inspired by thoughtful design.</p>
+          <p className="text-base">
+            © {new Date().getFullYear()} Asky.{' '}
+            <a
+              href="https://www.linkedin.com/in/anirudh8760/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-terracotta hover:text-coral transition-colors"
+            >
+              Made by Anirudh Kaushik
+            </a>
+          </p>
         </div>
       </footer>
     </div>
