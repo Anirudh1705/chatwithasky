@@ -1,4 +1,4 @@
-import { connectDb } from '@/lib/mongoConnect';
+﻿import { connectDb } from '@/lib/mongoConnect';
 import Chat from '@/models/chatSchema';
 import { NextRequest } from 'next/server';
 import jwt from 'jsonwebtoken';
@@ -29,25 +29,24 @@ export async function POST(req: NextRequest) {
   const decoded = verifyToken(token);
   if (!decoded) return new Response(JSON.stringify({ error: 'Invalid token' }), { status: 401 });
 
-  const apiKey = process.env.GROK_API_KEY;
-  if (!apiKey) return new Response(JSON.stringify({ error: 'GROK_API_KEY not configured' }), { status: 500 });
+  const apiKey = process.env.GROQ_API_KEY;
+  if (!apiKey) return new Response(JSON.stringify({ error: 'GROQ_API_KEY not configured' }), { status: 500 });
 
   const { message, chatId } = await req.json();
   if (!message) return new Response(JSON.stringify({ error: 'Message required' }), { status: 400 });
 
-  // Start the Grok stream request immediately — before any DB work
-  const grokRes = await fetch('https://api.x.ai/v1/chat/completions', {
+  const groqRes = await fetch('https://api.groq.com/openai/v1/chat/completions', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${apiKey}`,
     },
     body: JSON.stringify({
-      model: 'grok-3-mini',
+      model: 'llama-3.3-70b-versatile',
       messages: [
         {
           role: 'system',
-          content: "You are Asky, a professional and helpful AI assistant. Provide clear, concise, and thoughtful responses. Format your response using markdown with proper syntax for headers (#, ##, ###), bold (**text**), italic (*text*), code blocks (```), lists (- or *), and tables (| header | header |). Be direct, avoid repeating the user's question, and keep responses concise to minimize token usage.",
+          content: "You are Asky, a professional and helpful AI assistant. Provide clear, concise, and thoughtful responses. Format your response using markdown with proper syntax for headers (#, ##, ###), bold (**text**), italic (*text*), code blocks (```), lists (- or *), and tables (| header | header |). Be direct and keep responses concise.",
         },
         { role: 'user', content: message },
       ],
@@ -57,17 +56,17 @@ export async function POST(req: NextRequest) {
     }),
   });
 
-  if (!grokRes.ok) {
-    const err = await grokRes.json();
-    console.error('Grok API error:', err);
-    return new Response(JSON.stringify({ error: `Grok API error: ${grokRes.status}` }), { status: 500 });
+  if (!groqRes.ok) {
+    const err = await groqRes.json();
+    console.error('Groq API error:', err);
+    return new Response(JSON.stringify({ error: `Groq API error: ${groqRes.status}` }), { status: 500 });
   }
 
   const encoder = new TextEncoder();
 
   const stream = new ReadableStream({
     async start(controller) {
-      const reader = grokRes.body!.getReader();
+      const reader = groqRes.body!.getReader();
       const decoder = new TextDecoder();
       let fullContent = '';
       let buffer = '';
@@ -99,7 +98,6 @@ export async function POST(req: NextRequest) {
           }
         }
 
-        // DB save happens after stream completes — doesn't block the user
         await connectDb();
         let chat;
         if (chatId) {
@@ -133,7 +131,7 @@ export async function POST(req: NextRequest) {
           carbon: {
             kg: carbonEmissions,
             formatted: carbonEmissions < 0.000001
-              ? `${(carbonEmissions * 1000000).toFixed(2)} mg`
+              ? `${(carbonEmissions * 1000000).toFixed(2)} ug`
               : `${carbonEmissions.toFixed(6)} kg`,
           },
         })}\n\n`));
