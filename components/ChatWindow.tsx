@@ -296,6 +296,13 @@ export default function ChatWindow({ chatId }: ChatWindowProps) {
 
       if (!res.ok) {
         if (res.status === 401) router.push('/login')
+        const errData = await res.json().catch(() => ({}))
+        console.error('API error:', res.status, errData)
+        setMessages((prev) => [...prev, {
+          role: 'assistant',
+          content: `Error: ${errData.error || 'Failed to get response (status ' + res.status + ')'}`,
+          timestamp: new Date(),
+        }])
         setLoading(false)
         return
       }
@@ -369,6 +376,11 @@ export default function ChatWindow({ chatId }: ChatWindowProps) {
       }
     } catch (err) {
       console.error('Failed to send message:', err)
+      setMessages((prev) => [...prev, {
+        role: 'assistant',
+        content: 'Network error — please check your connection and try again.',
+        timestamp: new Date(),
+      }])
       setLoading(false)
       setStreaming(false)
     }
