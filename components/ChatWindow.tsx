@@ -351,7 +351,12 @@ export default function ChatWindow({ chatId }: ChatWindowProps) {
             }
 
             if (parsed.done) {
-              setCurrentChatId(parsed.chatId)
+              const newChatId = parsed.chatId.toString()
+              if (!currentChatId) {
+                // First message — navigate to the new chat URL
+                router.replace(`/chat/${newChatId}`)
+              }
+              setCurrentChatId(newChatId)
               setMessages((prev) => {
                 const updated = [...prev]
                 const last = updated[updated.length - 1]

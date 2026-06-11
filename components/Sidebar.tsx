@@ -1,9 +1,9 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useCallback } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
-import { useRouter } from 'next/navigation'
+import { useRouter, usePathname } from 'next/navigation'
 
 interface ChatItem {
   _id: string
@@ -16,20 +16,13 @@ export default function Sidebar() {
   const [userName, setUserName] = useState('')
   const [open, setOpen] = useState(true)
   const router = useRouter()
+  const pathname = usePathname()
 
-  useEffect(() => {
-    const name = localStorage.getItem('userName')
-    setUserName(name || 'User')
-    fetchChats()
-  }, [])
-
-  const fetchChats = async () => {
+  const fetchChats = useCallback(async () => {
     try {
       const token = localStorage.getItem('token')
       const res = await fetch('/api/chat/history', {
-        headers: {
-          'Authorization': `Bearer ${token}`,
-        },
+        headers: { 'Authorization': `Bearer ${token}` },
       })
       if (res.ok) {
         const data = await res.json()
@@ -38,7 +31,18 @@ export default function Sidebar() {
     } catch (err) {
       console.error('Failed to fetch chats')
     }
-  }
+  }, [])
+
+  useEffect(() => {
+    const name = localStorage.getItem('userName')
+    setUserName(name || 'User')
+    fetchChats()
+  }, [fetchChats])
+
+  // Re-fetch chats whenever the route changes (new chat created)
+  useEffect(() => {
+    fetchChats()
+  }, [pathname, fetchChats])
 
   const handleLogout = () => {
     localStorage.removeItem('token')
